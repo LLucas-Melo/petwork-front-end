@@ -30,5 +30,26 @@
           <div>© Copyright 2024. All Rights Reserved by </div>
         </div>
     </footer>
+
+
+    <script type="module" src="/controllers/app.js"></script>
+    <script type="module" src="controllers/routers.js"></script>
+    <script type="module" src="/modules/home/homeModule.js"></script>
+    <script type="module" src="/modules/pet-details/pet_detailsModule.js"></script>
+
+
+    <script type="module">
+      import App from "./controllers/app.js"; // Importe o App corretamente
+      
+      window.onload = function () {
+        if (App) {
+          App.init(); // Inicializa a aplicação
+          console.log("✅ App carregado com sucesso!");
+          App.routeTo({ module: "HomeModule" }); // Começa na Home
+        } else {
+          console.error("❌ Erro: App não foi carregado corretamente!");
+        }
+      };
+    </script>
 </body>
 </html>

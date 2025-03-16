@@ -1,3 +1,4 @@
+
 class Router {
   constructor(appInstance) {
     this.app = appInstance;
@@ -31,19 +32,35 @@ class Router {
    */
   navigateTo(path, addToHistory = true) {
     const cleanPath = path.split("?")[0]; // Remove query params, se houver
-    const moduleName = this.routes[cleanPath];
-
+    let moduleName = this.routes[cleanPath];
+    let params = {};
+  
+    // Verifica se a rota não foi encontrada e tenta combinar padrões dinâmicos
+    if (!moduleName) {
+      for (const route in this.routes) {
+        const regex = new RegExp("^" + route.replace(/:\w+/g, "(\\w+)") + "$");
+        const match = cleanPath.match(regex);
+        
+        if (match) {
+          moduleName = this.routes[route];
+          const paramNames = (route.match(/:\w+/g) || []).map(p => p.substring(1)); // Extrai os nomes dos parâmetros
+          paramNames.forEach((param, index) => {
+            params[param] = match[index + 1]; // Associa os valores capturados aos nomes dos parâmetros
+          });
+          break;
+        }
+      }
+    }
+  
     if (!moduleName) {
       console.warn(`⚠️ Nenhuma rota encontrada para "${path}". Redirecionando para padrão.`);
       return this.navigateTo(this.defaultRoute);
     }
-
-    const params = this.getParamsFromUrl(path);
-    
+  
     if (addToHistory) {
       history.pushState({ path }, "", path);
     }
-
+  
     this.app.routeTo({ module: moduleName, ...params });
   }
 
@@ -61,7 +78,7 @@ class Router {
 }
 
 
-const router = new Router(App);
+const router = new Router(window.App);
 
 // Registrar rotas
 router.registerRoute("/", "HomeModule", true);

@@ -1,4 +1,4 @@
-import "./routers.js"
+
 class AppController {
   constructor() {
     this._activeModule = null;
