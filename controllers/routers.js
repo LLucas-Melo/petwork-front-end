@@ -66,13 +66,13 @@ class Router {
 
   
   getParamsFromUrl(path) {
-    const segments = path.split("/").filter(Boolean); 
+    const segments = path.split("/").filter(Boolean);
     let params = {};
-
+  
     if (segments.length > 1) {
       params.id = segments[1]; 
-    }
-
+        }
+  
     return params;
   }
 }
@@ -84,6 +84,7 @@ const router = new Router(window.App);
 router.registerRoute("/", "HomeModule", true);
 router.registerRoute("/pets", "PetsModule");
 router.registerRoute("/pets/:id", "PetDetailsModule");
+router.registerRoute("/pet-create", "PetCreateModule");
 router.registerRoute("/profile", "UserProfileModule");
 
 // Permitir acesso global ao roteador
